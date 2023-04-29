@@ -1,0 +1,27 @@
+{
+  "name": "pascc-online",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@codemirror/language": "^6.6.0",
+    "@codemirror/legacy-modes": "^6.3.2",
+    "@ddietr/codemirror-themes": "^1.4.1",
+    "@highlightjs/vue-plugin": "^2.1.0",
+    "axios": "^1.4.0",
+    "codemirror": "^6.0.1",
+    "highlight.js": "^11.8.0",
+    "vue": "^3.2.47",
+    "vue-codemirror": "^6.1.1",
+    "vue-router": "^4.1.6",
+    "vuetify": "^3.2.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "vite": "^4.1.4"
+  }
+}
