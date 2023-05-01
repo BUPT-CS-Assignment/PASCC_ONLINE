@@ -58,7 +58,7 @@
       color="transparent" 
       width="90%"
     >
-      <v-card class="flex-1-0 my-6 rounded-lg
+      <v-card class="flex-1-1 my-6 rounded-lg
         elevation-10 align-self-start mx-3" 
       >
         <v-card-title class="d-flex flex-row align-center">
@@ -96,7 +96,7 @@
         <PascalEditor v-model="codepas"/>
       </v-card>
 
-      <v-card class="flex-1-0 my-6 rounded-lg 
+      <v-card class="flex-1-1 my-6 rounded-lg overflow-auto
         elevation-10 align-self-start mx-3" 
       >
         <!-- TABS -->

@@ -11,8 +11,11 @@ import * as directives from 'vuetify/directives'
 import '@mdi/font/css/materialdesignicons.css'
 
 // Highlightjs
-import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark-dimmed.css'
+import hljs from 'highlight.js/lib/core';
+import hljsVuePlugin from "@highlightjs/vue-plugin";
+import cpp from 'highlight.js/lib/languages/cpp';
+hljs.registerLanguage('c', cpp);
 
 const vuetify = createVuetify({
   components,
@@ -28,11 +31,5 @@ const vuetify = createVuetify({
 const app = createApp(App)
 app.use(router)
 app.use(vuetify)
-app.directive('highlight', function (el) {
-  const blocks = el.querySelectorAll('pre code');
-  blocks.forEach((block) => {
-      hljs.highlightBlock(block)
-  })
-})
-
+app.use(hljsVuePlugin)
 app.mount('#app')
