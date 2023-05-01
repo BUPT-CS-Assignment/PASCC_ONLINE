@@ -1,13 +1,20 @@
 <template>
-  <highlightjs 
-    autodetect
-  />
+  <div v-highlight >
+    <pre style="padding:0;margin:0;
+      border: none;
+      white-space: pre-wrap; 
+      word-wrap: break-word;"
+    >
+      <code>{{code}}</code>
+    </pre>
+  </div>
 </template>
 
 <script setup>
-// import 'highlight.js/styles/stackoverflow-light.css'
-import 'highlight.js/styles/github-dark-dimmed.css'
-import 'highlight.js/lib/common';
-import hljsVuePlugin from "@highlightjs/vue-plugin";
-const highlightjs = hljsVuePlugin.component;
+defineProps({
+  code: {
+    type: String,
+    default: ''
+  }
+})
 </script>
