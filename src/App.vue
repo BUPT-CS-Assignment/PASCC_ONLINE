@@ -87,7 +87,7 @@
           <v-btn density="compact" variant="text"
             :loading="loading"
             :disabled="loading"
-            @click="loader = 'loading', runAction"
+            @click="submitAction"
   
             size="x-large"
             :icon="action.icons[action.index]"
@@ -109,10 +109,11 @@
               true-value="1"
               false-value="0"
               v-model="action.index"
+              @update:model-value="result.codeout = action.index == 1 ? '/* ready */' : '/* runcode inactive */';"
             />
           </div>
         </v-card-title>
-        <PascalEditor v-model="codepas"/>
+        <PascalEditor v-model="action.codepas" style="max-height: 2000px;overflow-y:auto"/>
       </v-card>
 
       <v-card class="flex-1-1 my-6 rounded-lg overflow-auto
@@ -124,7 +125,7 @@
           <v-tab value="code">
             <p class="text-button font-weight-black">C Code</p>
           </v-tab>
-          <v-tab value="test" :disabled="action.index==0">
+          <v-tab value="test" :disabled="action.index == 0">
             <p class="text-button font-weight-black">Output</p>
           </v-tab>
         </v-tabs>
@@ -145,14 +146,10 @@
         <!-- CODE OUTPUT -->
         <v-window v-model="result.tab">
           <v-window-item value="code">
-            <CHighlight :code="codec"/>
+            <CHighlight :code="result.codec" style="max-height: 2000px;overflow-y:auto"/>
           </v-window-item>
-          <v-window-item value="test">
-            <v-card color="grey-darken-3" rounded="0">
-              <v-card-text>
-                {{result.msg[action.index]}}
-              </v-card-text>
-            </v-card>
+          <v-window-item value="test" >
+            <CHighlight :code="result.codeout" style="max-height: 2000px;overflow-y:auto"/>
           </v-window-item>
         </v-window>
 
@@ -198,22 +195,23 @@
 import {ref} from 'vue';
 import PascalEditor from './components/PascalEditor.vue';
 import CHighlight from './components/C-Highlight.vue'
+import axios from 'axios';
 export default {
   data() {
     return {
-      'action':{
+      action:{
         icons:['mdi-progress-wrench','mdi-play-speed'],
         msg:['Compile','Compile and Run'],
         index:0,
         loading:false,
-        
+        codepas: ref('program example(void);\nbegin\n  writeln(2023);\nend.'),
       },
       result:{
         'tab':0,
-        'msg':['-- RunCode Inactive', 'Pascal-S Example.\n'],
+        codec: ref('#include <stdio.h>\n#include <stdbool.h>\n#include <string.h>\n/// [ example ] created on 2023/5/2\nint main() {\n  printf("%d\\n", 2023);\n  return 0;\n}'),
+        codeout: ref('/* runcode inactive */'),
       },
-      'codepas': ref('program example;\nbegin\n  writeln(\'Pascal-S Example.\');\nend.'),
-      'codec': ref('#include <stdio.h>\n#include <stdbool.h>\n#include <string.h>\n/// Program Name :  example\nint main() {\n  printf("Pascal-S Example.\\n");\n  return 0;\n}'),
+
       loader:null,
       loading:false,
       feedback_d:false,
@@ -223,15 +221,18 @@ export default {
     PascalEditor,
     CHighlight,
   },
-  watch:{
-    loader(){
-      const l = this.loader;
-      this[l] = !this[l];
-      setTimeout(() => {
-        this[l] = !this[l]
-      }, 3000);
-      this.loader = null;
+  setup(){
+    const init = () =>{
+      localStorage.setItem('pascc-token', '')
+      axios.get('/api/register')
+      .then(res => {
+        if(res.data.status == 0){
+          localStorage.setItem('pascc-token', res.data.token)
+        }
+      })
     }
+    init();
+    return {};
   },
   methods:{
     uploadSourceCode(){
@@ -246,12 +247,35 @@ export default {
       // read contents
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.codepas = e.target.result;
+        this.action.codepas = e.target.result;
       };
       reader.readAsText(file);
     },
-    runAction(){
-      // TODO
+    submitAction(){
+      const token = localStorage.getItem('pascc-token');
+      this.loader = 'loading';
+      const l = this.loader;
+      this[l] = !this[l];
+      this.result.codec = '/* compiling... */';
+      this.result.codeout =  this.action.index == 1 ? '/* running... */' : '/* runcode inactive */';
+
+      // submit
+      const {res} = axios.post('/api/submit', {
+        token: token,
+        source: this.action.codepas,
+        runflag: this.action.index==1,
+      })
+      .then(res => {
+        console.log('submit return ' + res.data.status)
+        this.result.codec = res.data.result;
+        if(this.action.index == 1){
+          this.result.codeout = res.data.output;
+        }
+
+        this[l] = !this[l];
+        this.loader = null;
+      })
+      
     },
     downloadResult(){
       // TODO
