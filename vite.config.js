@@ -11,14 +11,14 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  server: {
-    open:true,
-    proxy: {
-      '/api': {
-        target: 'http://api.netx.world:10400',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
-  }
+  // server: {
+  //   open:true,
+  //   proxy: {
+  //     '/api': {
+  //       target: 'http://api.netx.world:10400',
+  //       changeOrigin: true,
+  //       rewrite: (path) => path.replace(/^\/api/, '')
+  //     }
+  //   }
+  // }
 })
