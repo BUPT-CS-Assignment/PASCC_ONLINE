@@ -70,7 +70,7 @@
           <v-btn density="compact" variant="text"
             size="x-large"
             color="white"
-            class="ml-3 mb-1 me-auto"
+            class="ml-3 me-auto"
             icon="mdi-file-upload-outline"
           >
             <v-icon></v-icon>
