@@ -224,7 +224,7 @@ export default {
   setup(){
     const init = () =>{
       localStorage.setItem('pascc-token', '')
-      axios.get('http://api.netx.world:10400/register')
+      axios.get('https://api.netx.world/register')
       .then(res => {
         if(res.data.status == 0){
           localStorage.setItem('pascc-token', res.data.token)
@@ -260,7 +260,7 @@ export default {
       this.result.codeout =  this.action.index == 1 ? '/* running... */' : '/* runcode inactive */';
 
       // submit
-      const {res} = axios.post('http://api.netx.world:10400/submit', {
+      const {res} = axios.post('https://api.netx.world/submit', {
         token: token,
         source: this.action.codepas,
         runflag: this.action.index==1,
