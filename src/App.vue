@@ -64,13 +64,13 @@
         elevation-10 align-self-start mx-3" 
       >
         <v-card-title class="d-flex flex-wrap align-center">
-          <p class="text-button font-weight-bold ml-1 me-auto">
+          <p class="text-button font-weight-bold mx-2">
             Editor
           </p>
           <v-btn density="compact" variant="text"
             size="x-large"
             color="white"
-            class="mr-1"
+            class="ml-3 mb-1 me-auto"
             icon="mdi-file-upload-outline"
           >
             <v-icon></v-icon>
