@@ -169,8 +169,16 @@
           </v-card-title>
           <v-btn size="x-large" density="compact" variant="text"
               icon="mdi-email-fast-outline" class="mr-4"
+              :loading="f_loading"
+              :disabled="f_loading"
               @click="sendFeedBack"
-          />
+          >
+            <template v-slot:loader>
+              <span class="custom-loader">
+                <v-icon light>mdi-cached</v-icon>
+              </span>
+            </template>
+          </v-btn>
         </v-toolbar>
 
         <v-textarea auto-grow shaped class="mt-2 mx-5" theme="light"
@@ -204,17 +212,19 @@ export default {
         msg:['Compile','Compile and Run'],
         index:0,
         loading:false,
-        codepas: ref('program example;\nbegin\n  writeln(2023);\nend.'),
+        codepas: ref('program example;\nbegin\n  writeln("2023");\nend.'),
       },
       result:{
-        'tab':0,
-        codec: ref('#include <stdio.h>\n#include <string.h>\n/// [ example ] created on 2023/5/2\nint main() {\n  printf("%d\\n", 2023);\n  return 0;\n}'),
+        tab:0,
+        codec: ref('#include <stdio.h>\n#include <string.h>\n/// [ example ] created on 2023/5/2\nint main() {\n  printf("%s\\n", "2023");\n  return 0;\n}'),
         codeout: ref('/* runcode inactive */'),
       },
 
       loader:null,
       loading:false,
       feedback_d:false,
+      f_loading:false,
+      f_loader:null,
     }
   },
   components: {
@@ -274,22 +284,65 @@ export default {
 
         this[l] = !this[l];
         this.loader = null;
+      }).catch(err => {
+        console.log(err);
+        alert('submit error. network error occured.');
+        this[l] = !this[l];
+        this.loader = null;
       })
       
     },
     downloadResult(){
-      // TODO
+      var text = this.result.tab == 'code' ? this.result.codec : this.result.codeout;
+      var name = this.result.tab == 'code' ? 'result.c' : 'out.txt';
+      if(text.length == 0){
+          alert("no result to download");
+          return;
+      }
+      var blob = new Blob([text], { type: "text/plain"}); 
+      var anchor = document.createElement("a"); 
+      anchor.download = name; 
+      anchor.href = window.URL.createObjectURL(blob); 
+      anchor.target ="_blank"; 
+      anchor.style.display = "none"; 
+      document.body.appendChild(anchor); 
+      anchor.click(); 
+      document.body.removeChild(anchor);
     },
     sendFeedBack(){
-      const feedback = this.$refs.feedback.value;
-      console.log(feedback)
-      this.feedback_d = false;
+      var feedback = this.$refs.feedback.value;
+      feedback = feedback.trim();
+      if(feedback.length < 10 || feedback.length > 500){
+        alert('words of trimed feedback should be between 10 and 500');
+        return;
+      }
+      this.f_loader = 'f_loading';
+      const l = this.f_loader;
+      this[l] = !this[l];
+      
+      const token = localStorage.getItem('pascc-token');
+      const {res} = axios.post('https://api.netx.world/feedback', {
+        token: token,
+        text: feedback,
+      }).then(res => {
+        console.log('feedback return ' + res.data.status)
+        alert(res.data.status == 0 ? 'feedback success.' : 'feedback failed. internal error occured.')
+        this[l] = !this[l];
+        this.f_loader = null;
+        this.feedback_d = false;
+      }).catch(err => {
+        console.log(err);
+        alert('feedback failed. network error occured.')
+        this[l] = !this[l];
+        this.f_loader = null;
+      })
+
     },
     showDocument(){
-      // TODO
+      alert('document will be open-sourced on 2023/5/11')
     },
     showGithubLink(){
-      // TODO
+      alert('github repo will be open-sourced on 2023/5/11')
     }
   }
   
