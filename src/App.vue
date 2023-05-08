@@ -204,11 +204,11 @@ export default {
         msg:['Compile','Compile and Run'],
         index:0,
         loading:false,
-        codepas: ref('program example(void);\nbegin\n  writeln(2023);\nend.'),
+        codepas: ref('program example;\nbegin\n  writeln(2023);\nend.'),
       },
       result:{
         'tab':0,
-        codec: ref('#include <stdio.h>\n#include <stdbool.h>\n#include <string.h>\n/// [ example ] created on 2023/5/2\nint main() {\n  printf("%d\\n", 2023);\n  return 0;\n}'),
+        codec: ref('#include <stdio.h>\n#include <string.h>\n/// [ example ] created on 2023/5/2\nint main() {\n  printf("%d\\n", 2023);\n  return 0;\n}'),
         codeout: ref('/* runcode inactive */'),
       },
 
