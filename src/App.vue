@@ -212,11 +212,11 @@ export default {
         msg:['Compile','Compile and Run'],
         index:0,
         loading:false,
-        codepas: ref('program example;\nbegin\n  writeln("2023");\nend.'),
+        codepas: ref('program example;\nconst date = 2023.5;\ntype string = array [1..20] of char;\nvar x: record\n         name:string;\n         data:integer;\n       end;\n\nprocedure set(var x: integer);\nbegin\n  x := trunc(date);\nend;\n\nbegin\n  x.name := "Pascal-S";\n  set(x.data);\n  writeln(x.name," @ ",x.data);\nend.\n'),
       },
       result:{
         tab:0,
-        codec: ref('#include <stdio.h>\n#include <string.h>\n/// [ example ] created on 2023/5/2\nint main() {\n  printf("%s\\n", "2023");\n  return 0;\n}'),
+        codec: ref('#include <stdio.h>\n#include <string.h>\n#define trunc(x) ((int)x)\n/// [example] created on 2023/5/8\nconst float date = 2023.50;\ntypedef char string[20];\nstruct {\n  string name;\n  int data;\n} x;\nvoid set(int* x) { *(x) = trunc(date); }\nint main() {\n  strcpy(x.name, "Pascal-S");\n  set(&x.data);\n  printf("%s%s%d\\n", x.name, " @ ", x.data);\n  return 0;\n}'),
         codeout: ref('/* runcode inactive */'),
       },
 
