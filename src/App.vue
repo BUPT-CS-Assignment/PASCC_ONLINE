@@ -216,7 +216,7 @@ export default {
       },
       result:{
         tab:0,
-        codec: ref('#include <stdio.h>\n#include <string.h>\n#define trunc(x) ((int)x)\n/// [example] created on 2023/5/8\nconst float date = 2023.50;\ntypedef char string[20];\nstruct {\n  string name;\n  int data;\n} x;\nvoid set(int* x) { *(x) = trunc(date); }\nint main() {\n  strcpy(x.name,\n         "Pascal-"\n         "S"););\n  set(&x.data);\n  printf("%s%c%c%d\\n", x.name, \' \', \'@\', x.data);\n  return 0;\n}'),
+        codec: ref('#include <stdio.h>\n#include <string.h>\n#define trunc(x) ((int)x)\n/// [example] created on 2023/5/8\nconst float date = 2023.50;\ntypedef char string[20];\nstruct {\n  string name;\n  int data;\n} x;\nvoid set(int* x) { *(x) = trunc(date); }\nint main() {\n  strcpy(x.name,\n         "Pascal-"\n         "S");\n  set(&x.data);\n  printf("%s%c%c%d\\n", x.name, \' \', \'@\', x.data);\n  return 0;\n}'),
         codeout: ref('/* runcode inactive */'),
       },
 
