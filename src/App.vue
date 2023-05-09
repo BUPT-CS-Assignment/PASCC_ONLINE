@@ -233,7 +233,8 @@ export default {
   },
   setup(){
     const init = () =>{
-      localStorage.setItem('pascc-token', '')
+      var t = localStorage.getItem('pascc-token')
+      if (t != null) return;
       axios.get('https://api.netx.world/register')
       .then(res => {
         if(res.data.status == 0){
@@ -281,7 +282,10 @@ export default {
         if(this.action.index == 1){
           this.result.codeout = res.data.output;
         }
-
+        if(res.data.status == 3) {
+          alert('submit error. token expired.');
+          localStorage.removeItem('pascc-token');
+        }
         this[l] = !this[l];
         this.loader = null;
       }).catch(err => {
@@ -327,6 +331,10 @@ export default {
       }).then(res => {
         console.log('feedback return ' + res.data.status)
         alert(res.data.status == 0 ? 'feedback success.' : 'feedback failed. internal error occured.')
+        if(res.data.status == 3) {
+          alert('submit error. token expired.');
+          localStorage.removeItem('pascc-token');
+        }
         this[l] = !this[l];
         this.f_loader = null;
         this.feedback_d = false;
